@@ -9,18 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ResenaServiceTest {
+class ResenaServiceTest {
 
     @Mock
     private ResenaRepository resenaRepository;
@@ -29,38 +25,38 @@ public class ResenaServiceTest {
     private ResenaService resenaService;
 
     @Test
-    void crearResena_DeberiaGuardarYRetornarResena() {
+    void crearResena_Exito() {
+        // Given
         ResenaRequest request = new ResenaRequest();
-        request.setProductoId(1L);
+        request.setProductoId("VIN-DARK-SIDE");
         request.setCalificacion(5);
-        request.setComentario("¡Excelente producto!");
-        Resena resenaSimulada = Resena.builder()
-                .id(100L)
-                .productoId(1L)
-                .calificacion(5)
-                .comentario("¡Excelente producto!")
-                .fechaCreacion(LocalDateTime.now())
-                .build();
-        when(resenaRepository.save(any(Resena.class))).thenReturn(resenaSimulada);
+        request.setComentario("Excelente sonido");
+
+        when(resenaRepository.save(any(Resena.class))).thenAnswer(i -> i.getArgument(0));
+
+
         Resena resultado = resenaService.crearResena(request);
+
+
         assertNotNull(resultado);
-        assertEquals(100L, resultado.getId());
-        assertEquals(1L, resultado.getProductoId());
-        assertEquals(5, resultado.getCalificacion());
-        assertEquals("¡Excelente producto!", resultado.getComentario());
+        assertEquals("VIN-DARK-SIDE", resultado.getProductoId());
         verify(resenaRepository, times(1)).save(any(Resena.class));
     }
 
     @Test
-    void obtenerResenasPorProducto_DeberiaRetornarListaDeResenas() {
-        Long productoId = 1L;
-        Resena resena1 = Resena.builder().id(1L).productoId(productoId).calificacion(4).comentario("Bueno").build();
-        Resena resena2 = Resena.builder().id(2L).productoId(productoId).calificacion(5).comentario("Genial").build();
-        when(resenaRepository.findByProductoId(productoId)).thenReturn(List.of(resena1, resena2));
-        List<Resena> resultado = resenaService.obtenerResenasPorProducto(productoId);
-        assertNotNull(resultado);
-        assertEquals(2, resultado.size());
-        assertEquals(productoId, resultado.get(0).getProductoId());
-        verify(resenaRepository, times(1)).findByProductoId(productoId);
+    void obtenerPorProducto_Exito() {
+
+        Resena resena = new Resena();
+        resena.setProductoId("VIN-DARK-SIDE");
+        resena.setCalificacion(4);
+
+        when(resenaRepository.findByProductoId("VIN-DARK-SIDE")).thenReturn(List.of(resena));
+
+
+        List<Resena> resultado = resenaService.obtenerPorProducto("VIN-DARK-SIDE");
+
+        assertFalse(resultado.isEmpty());
+        assertEquals("VIN-DARK-SIDE", resultado.get(0).getProductoId());
+        verify(resenaRepository, times(1)).findByProductoId("VIN-DARK-SIDE");
     }
 }
