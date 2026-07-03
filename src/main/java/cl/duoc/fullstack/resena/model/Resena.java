@@ -1,18 +1,12 @@
 package cl.duoc.fullstack.resena.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "resenas")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Resena {
 
     @Id
@@ -20,7 +14,7 @@ public class Resena {
     private Long id;
 
     @Column(name = "producto_id", nullable = false)
-    private Long productoId;
+    private String productoId;
 
     @Column(nullable = false)
     private Integer calificacion;
@@ -28,11 +22,11 @@ public class Resena {
     @Column(nullable = false, length = 500)
     private String comentario;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 
     @PrePersist
-    public void prePersist() {
-        this.fechaCreacion = LocalDateTime.now();
+    protected void onCreate() {
+        fechaCreacion = LocalDateTime.now();
     }
 }

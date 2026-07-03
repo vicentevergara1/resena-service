@@ -2,11 +2,8 @@ package cl.duoc.fullstack.resena.repository;
 
 import cl.duoc.fullstack.resena.model.Resena;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
 public interface ResenaRepository extends JpaRepository<Resena, Long> {
-    List<Resena> findByProductoId(Long productoId);
+    List<Resena> findByProductoId(String productoId);
 }

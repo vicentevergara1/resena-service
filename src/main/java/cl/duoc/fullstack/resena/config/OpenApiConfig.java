@@ -7,13 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI resenaServiceOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Reseñas - Plataforma de Pedidos")
-                        .version("1.0.0")
-                        .description("Microservicio encargado de la gestión de calificaciones y comentarios de productos."));
+                        .title("API de Reseñas - Tienda de Vinilos")
+                        .description("Microservicio para gestionar reseñas y calificaciones.")
+                        .version("1.0.0"));
     }
 }

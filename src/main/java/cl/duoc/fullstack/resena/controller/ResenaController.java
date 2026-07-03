@@ -33,7 +33,7 @@ public class ResenaController {
     @GetMapping("/producto/{productoId}")
     @Operation(summary = "Obtener reseñas por producto", description = "Lista todas las reseñas de un producto específico")
     @ApiResponse(responseCode = "200", description = "Operación exitosa")
-    public ResponseEntity<List<Resena>> obtenerResenas(@PathVariable Long productoId) {
-        return ResponseEntity.ok(resenaService.obtenerResenasPorProducto(productoId));
+    public ResponseEntity<List<Resena>> obtenerResenas(@PathVariable String productoId) {
+        return ResponseEntity.ok(resenaService.obtenerPorProducto(productoId));
     }
 }

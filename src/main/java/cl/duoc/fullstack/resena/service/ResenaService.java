@@ -5,7 +5,7 @@ import cl.duoc.fullstack.resena.model.Resena;
 import cl.duoc.fullstack.resena.repository.ResenaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -14,16 +14,23 @@ public class ResenaService {
 
     private final ResenaRepository resenaRepository;
 
+    @Transactional
     public Resena crearResena(ResenaRequest request) {
-        Resena resena = Resena.builder()
+        Resena nuevaResena = Resena.builder()
                 .productoId(request.getProductoId())
                 .calificacion(request.getCalificacion())
                 .comentario(request.getComentario())
                 .build();
-        return resenaRepository.save(resena);
+        return resenaRepository.save(nuevaResena);
     }
 
-    public List<Resena> obtenerResenasPorProducto(Long productoId) {
+    @Transactional(readOnly = true)
+    public List<Resena> obtenerPorProducto(String productoId) {
         return resenaRepository.findByProductoId(productoId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Resena> obtenerTodas() {
+        return resenaRepository.findAll();
     }
 }
